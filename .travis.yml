@@ -1,0 +1,17 @@
+language: crystal
+services:
+  - postgresql
+script:
+  - crystal spec
+  - crystal docs
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
+  local_dir: doc
+before_script:
+  - psql -c 'create database migrate_test;' -U postgres
+env:
+  - DATABASE_URL=postgres://postgres@localhost:5432/migrate_test
