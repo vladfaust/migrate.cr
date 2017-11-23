@@ -1,6 +1,6 @@
 # Migrate
 
-A simple(r) migration solution.
+Simple database migration solution.
 
 [![Build Status](https://travis-ci.org/vladfaust/migrate.cr.svg?branch=master)](https://travis-ci.org/vladfaust/migrate.cr) [![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://vladfaust.com/migrate.cr) [![Dependency Status](https://shards.rocks/badge/github/vladfaust/migrate.cr/status.svg)](https://shards.rocks/github/vladfaust/migrate.cr) [![GitHub release](https://img.shields.io/github/release/vladfaust/migrate.cr.svg)](https://github.com/vladfaust/migrate.cr/releases)
 
@@ -10,9 +10,10 @@ In comparsion to [micrate.cr](https://github.com/juanedi/micrate) (which seems t
 
 - Can specify generic number as migration version (e.g. `1.sql`, `2_create_users.sql` or `1511464469_create_posts.sql`).
 - Can migrate to a specific version.
-- All migrations are executed in transactions.
 - Can pass `DB::Database` instance to migrator.
-- Current version is stored in a database table `"version"` (can be changed) with a single value `"version"` (can be changed as well).
+- All migrations are applied in a single transaction.
+- SQL errors are logged and do abort the transaction.
+- Actual migration version is stored in a database table `"version"` (can be changed) with a single value `"version"` (can be changed as well).
 - CLI removed.
 
 This shard **is not compatible** with [micrate.cr](https://github.com/juanedi/micrate).
@@ -81,7 +82,7 @@ DROP TABLE baz;
 
 ### Migration in the code
 
-All migrations are executed as **transactions**. That means that if a migration is invalid, all statements in this session will be cancelled.
+All migrations are applied in a single **transaction**. That means that if a migration is invalid, all statements in this transaction will be rolled back.
 
 ```crystal
 require "pg"
@@ -129,7 +130,7 @@ migrator.current_version # => 10
 
 ### [Cakefile](https://github.com/axvm/cake)
 
-Note that `Cakefile` doesn't support task arguments (that means `Migrator#to` is not available).
+Note that `Cakefile` doesn't support task arguments (that means that `Migrator#to` will not available).
 
 ```crystal
 require "pg"
@@ -179,9 +180,9 @@ ditto
 
 ## Testing
 
-```
-env DATABASE_URL=<YOUR_DATABASE_URL> crystal spec
-```
+1. Create an empty PostgreSQL database (e.g. `migrate`)
+2. `cd migrate`
+3. `env DATABASE_URL=postgres://postgres:postgres@localhost:5432/migrate crystal spec`
 
 ## Contributing
 
