@@ -146,4 +146,17 @@ describe Migrate::Migrator do
       baz_exists?(db).should be_falsey
     end
   end
+
+  describe "#to_latest" do
+    it do
+      migrator.to_latest
+      migrator.current_version.should eq 10
+    end
+
+    it "creates tables" do
+      foo_exists?(db).should be_truthy
+      bar_exists?(db).should be_truthy
+      baz_exists?(db).should be_truthy
+    end
+  end
 end

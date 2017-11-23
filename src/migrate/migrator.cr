@@ -50,6 +50,11 @@ module Migrate
       end
     end
 
+    # Apply all the migrations from current version to the last one.
+    def to_latest
+      to(all_versions.last)
+    end
+
     # Migrate one step up.
     def up
       _next = next_version

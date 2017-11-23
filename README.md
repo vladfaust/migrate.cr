@@ -121,6 +121,10 @@ migrator.current_version # => 10
 migrator.reset
 # =>  INFO -- : Successfully migrated from version 10 to 0 in 28.958ms
 migrator.current_version # => 0
+
+migrator.to_latest
+# =>  INFO -- : Successfully migrated from version 0 to 10 in 39.189ms
+migrator.current_version # => 10
 ```
 
 ### [Cakefile](https://github.com/axvm/cake)
@@ -133,13 +137,23 @@ require "migrate"
 
 migrator = Migrate::Migrator.new(ditto)
 
-desc "Migrate Database one step forward"
-task :db_up do
-  migrator.up
+desc "Migrate Database to the latest version"
+task :dbmigrate do
+  migrator.to_latest
 end
 ```
 
-Usage: `cake db_up`
+Usage:
+
+```
+$ cake db:migrate
+DEBUG -- : CREATE TABLE IF NOT EXISTS version (version INT NOT NULL)
+DEBUG -- : SELECT COUNT(version) FROM version
+DEBUG -- : SELECT version FROM version
+DEBUG -- : Applied versions: 1, 2, 10
+DEBUG -- : SELECT version FROM version
+ INFO -- : Successfully migrated from version 0 to 10 in 33.46ms
+```
 
 ### [Sam.cr](https://github.com/imdrasil/sam.cr)
 
@@ -150,13 +164,18 @@ require "migrate"
 Sam.namespace "db" do
   migrator = Migrate::Migrator.new(ditto)
 
-  task "up" do
-    migrator.up
+  task "migrate" do
+    migrator.to_latest
   end
 end
 ```
 
-Usage: `crystal sam.cr -- db:up`
+Usage:
+
+```
+crystal sam.cr -- db:migrate
+ditto
+```
 
 ## Testing
 
