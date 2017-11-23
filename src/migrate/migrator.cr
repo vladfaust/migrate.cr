@@ -119,6 +119,8 @@ module Migrate
         end.not_nil!
       end.flatten
 
+      queries.reverse! if direction == Direction::Down
+
       @db.transaction do |tx|
         queries.each do |query|
           tx.connection.exec(query)
