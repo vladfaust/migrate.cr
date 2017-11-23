@@ -125,19 +125,21 @@ migrator.current_version # => 0
 
 ### [Cakefile](https://github.com/axvm/cake)
 
+Note that `Cakefile` doesn't support task arguments (that means `Migrator#to` is not available).
+
 ```crystal
 require "pg"
 require "migrate"
 
 migrator = Migrate::Migrator.new(ditto)
 
-desc "Migrate one step forward"
-task :migrate_up do
+desc "Migrate Database one step forward"
+task :db_up do
   migrator.up
 end
 ```
 
-Usage: `cake migrate_up`
+Usage: `cake db_up`
 
 ### [Sam.cr](https://github.com/imdrasil/sam.cr)
 
@@ -146,17 +148,15 @@ require "sam"
 require "migrate"
 
 Sam.namespace "db" do
-  namespace "migrate" do
-    migrator = Migrate::Migrator.new(ditto)
+  migrator = Migrate::Migrator.new(ditto)
 
-    task "up" do
-      migrator.up
-    end
+  task "up" do
+    migrator.up
   end
 end
 ```
 
-Usage: `crystal sam.cr -- db:migrate:up`
+Usage: `crystal sam.cr -- db:up`
 
 ## Testing
 
