@@ -11,6 +11,7 @@ In comparsion to [micrate.cr](https://github.com/juanedi/micrate) (which seems t
 - Can specify generic number as migration version (e.g. `1.sql`, `2_create_users.sql` or `1511464469_create_posts.sql`).
 - Can migrate to a specific version.
 - All migrations are executed in transactions.
+- Can pass `DB::Database` instance to migrator.
 - Current version is stored in a database table `"version"` (can be changed) with a single value `"version"` (can be changed as well).
 - CLI removed.
 
@@ -87,7 +88,7 @@ require "pg"
 require "migrate"
 
 migrator = Migrate::Migrator.new(
-  ENV["DATABASE_URL"],
+  DB.open(ENV["DATABASE_URL"]),
   Logger.new(STDOUT),
   File.join("db", "migrations"), # Path to migrations
   "version", # Version table name

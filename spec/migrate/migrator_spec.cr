@@ -1,10 +1,10 @@
 require "../spec_helper"
 
+db = DB.open(ENV["DATABASE_URL"])
+
 {% for table in %w(foo bar baz) %}
-  def {{table.id}}_exists?
-    DB.open(ENV["DATABASE_URL"]) do |db|
-      db.scalar("SELECT COUNT(*) FROM {{table.id}}").as(Int64)
-    end
+  def {{table.id}}_exists?(db)
+    db.scalar("SELECT COUNT(*) FROM {{table.id}}").as(Int64)
   rescue
     false
   end
@@ -14,7 +14,7 @@ describe Migrate::Migrator do
   drop_db
 
   migrator = Migrate::Migrator.new(
-    ENV["DATABASE_URL"],
+    db,
     Logger.new(STDOUT).tap(&.level = Logger::DEBUG),
     File.join("spec", "migrations")
   )
@@ -52,8 +52,8 @@ describe Migrate::Migrator do
     end
 
     it "creates tables" do
-      foo_exists?.should be_truthy
-      bar_exists?.should be_truthy
+      foo_exists?(db).should be_truthy
+      bar_exists?(db).should be_truthy
     end
   end
 
@@ -80,8 +80,8 @@ describe Migrate::Migrator do
     end
 
     it "drops table" do
-      foo_exists?.should be_truthy
-      bar_exists?.should be_falsey
+      foo_exists?(db).should be_truthy
+      bar_exists?(db).should be_falsey
     end
   end
 
@@ -92,9 +92,9 @@ describe Migrate::Migrator do
     end
 
     it "creates tables" do
-      foo_exists?.should be_truthy
-      bar_exists?.should be_truthy
-      baz_exists?.should be_truthy
+      foo_exists?(db).should be_truthy
+      bar_exists?(db).should be_truthy
+      baz_exists?(db).should be_truthy
     end
 
     context "when already at this version" do
@@ -128,9 +128,9 @@ describe Migrate::Migrator do
     end
 
     it "persists tables" do
-      foo_exists?.should be_truthy
-      bar_exists?.should be_truthy
-      baz_exists?.should be_truthy
+      foo_exists?(db).should be_truthy
+      bar_exists?(db).should be_truthy
+      baz_exists?(db).should be_truthy
     end
   end
 
@@ -141,9 +141,9 @@ describe Migrate::Migrator do
     end
 
     it "drops tables" do
-      foo_exists?.should be_falsey
-      bar_exists?.should be_falsey
-      baz_exists?.should be_falsey
+      foo_exists?(db).should be_falsey
+      bar_exists?(db).should be_falsey
+      baz_exists?(db).should be_falsey
     end
   end
 end

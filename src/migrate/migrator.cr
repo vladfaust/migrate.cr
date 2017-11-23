@@ -9,7 +9,7 @@ module Migrate
     MIGRATION_FILE_REGEX = /(?<version>\d+)(_(?<name>\w+))?\.sql/
 
     def initialize(
-                   @db_url : String,
+                   @db : DB::Database,
                    @logger : Logger? = nil,
                    @dir : String = File.join("db", "migrations"),
                    @table : String = "version",
@@ -24,10 +24,8 @@ module Migrate
         table:  @table,
       }
 
-      DB.open(@db_url) do |db|
-        @logger.try &.debug(query)
-        db.scalar(query).as(Int32 | Int64)
-      end
+      @logger.try &.debug(query)
+      @db.scalar(query).as(Int32 | Int64)
     end
 
     # Return the next version as defined in migrations dir.
@@ -116,14 +114,12 @@ module Migrate
         end.not_nil!
       end.flatten
 
-      DB.open(@db_url) do |db|
-        db.transaction do |tx|
-          queries.each do |query|
-            tx.connection.exec(query)
-          end
-
-          tx.connection.exec(update_version_query(target_version))
+      @db.transaction do |tx|
+        queries.each do |query|
+          tx.connection.exec(query)
         end
+
+        tx.connection.exec(update_version_query(target_version))
       end
 
       previous = current
@@ -190,17 +186,15 @@ module Migrate
         value:  0,
       }
 
-      DB.open(@db_url) do |db|
-        @logger.try &.debug(table_query)
-        db.exec(table_query)
+      @logger.try &.debug(table_query)
+      @db.exec(table_query)
 
-        @logger.try &.debug(count_query)
-        count = db.scalar(count_query).as(Int64)
+      @logger.try &.debug(count_query)
+      count = @db.scalar(count_query).as(Int64)
 
-        if count == 0
-          @logger.try &.debug(insert_query)
-          db.exec(insert_query)
-        end
+      if count == 0
+        @logger.try &.debug(insert_query)
+        @db.exec(insert_query)
       end
     end
   end
