@@ -121,9 +121,9 @@ describe Migrate::Migrator do
     end
   end
 
-  describe "#remigrate" do
+  describe "#redo" do
     it do
-      migrator.remigrate
+      migrator.redo
       migrator.current_version.should eq 10
     end
 

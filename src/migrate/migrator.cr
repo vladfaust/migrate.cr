@@ -73,7 +73,7 @@ module Migrate
     end
 
     # Revert all migrations and then migrate to current version.
-    def remigrate
+    def redo
       current = current_version
       reset
       to(current)

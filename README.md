@@ -113,7 +113,7 @@ migrator.to(10)
 migrator.current_version # => 10
 migrator.next_version    # => nil
 
-migrator.remigrate
+migrator.redo
 # =>  INFO -- : Successfully migrated from version 10 to 0 in 30.006ms
 # =>  INFO -- : Successfully migrated from version 0 to 10 in 72.877ms
 migrator.current_version # => 10
