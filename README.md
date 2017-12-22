@@ -6,7 +6,7 @@ Simple database migration solution.
 
 ## Motivation
 
-In comparsion to [micrate.cr](https://github.com/juanedi/micrate) (which seems to be abandoned as for 23/11/17):
+In comparsion to [micrate.cr](https://github.com/juanedi/micrate):
 
 - Can specify generic number as migration version (e.g. `1.sql`, `2_create_users.sql` or `1511464469_create_posts.sql`).
 - Can migrate to a specific version.
@@ -16,7 +16,7 @@ In comparsion to [micrate.cr](https://github.com/juanedi/micrate) (which seems t
 - Actual migration version is stored in a database table `"version"` (can be changed) with a single value `"version"` (can be changed as well).
 - CLI removed.
 
-This shard **is not compatible** with [micrate.cr](https://github.com/juanedi/micrate).
+This shard **is not compatible** with [micrate.cr](https://github.com/juanedi/micrate), because it uses diferrent notations in SQL files (`-- !migrate Up` instead of `-- !micrate Up`) and db scheme (see above). In fact, if you really want, you can transfer your existing app to Migrate, but this will require some manual changes.
 
 ## Installation
 
@@ -41,7 +41,7 @@ CREATE TABLE foo (
   content TEXT NOT NULL
 );
 
--- Indexes
+-- Indexes (it's just a comment, no utility function)
 CREATE UNIQUE INDEX foo_content_index ON foo (content);
 
 -- !migrate down
@@ -130,16 +130,15 @@ migrator.current_version # => 10
 
 ### [Cakefile](https://github.com/axvm/cake)
 
-Note that `Cakefile` doesn't support task arguments (that means that `Migrator#to` will not available).
+Note that `Cakefile` doesn't support task arguments (that means that `Migrator#to` will not be available). Also see [cake-bake](https://github.com/vladfaust/cake-bake.cr) for baking Cakefiles (this could be helpful in Docker deployments).
 
 ```crystal
 require "pg"
 require "migrate"
 
-migrator = Migrate::Migrator.new(ditto)
-
 desc "Migrate Database to the latest version"
 task :dbmigrate do
+  migrator = Migrate::Migrator.new(ditto)
   migrator.to_latest
 end
 ```
