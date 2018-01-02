@@ -106,7 +106,7 @@ describe Migrate::Migrator do
 
     context "when unknown version" do
       it "raises" do
-        expect_raises do
+        expect_raises Exception do
           migrator.to(42)
         end
       end
