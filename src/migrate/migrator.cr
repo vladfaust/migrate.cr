@@ -24,7 +24,6 @@ module Migrate
         table:  @table,
       }
 
-      @logger.try &.debug(query)
       @db.scalar(query).as(Int32 | Int64)
     end
 
@@ -102,7 +101,21 @@ module Migrate
         end
       end
 
-      @logger.try &.debug("Applied versions: #{applied_versions.map(&.to_s).join(", ")}")
+      case direction
+      when Direction::Up
+        @logger.try &.info("Migrating up to version #{applied_versions.dup.unshift(current.to_i64).map(&.to_s).join(" → ")}")
+      when Direction::Down
+        # Add previous version to the list of applied versions,
+        # turning "10 → 2" into "10 → 2 → 1"
+        versions = applied_versions.dup.tap do |v|
+          index = all_versions.index(v[0])
+          if index && index > 0
+            v.unshift(all_versions[index - 1])
+          end
+        end
+
+        @logger.try &.info("Migrating down to version #{versions.reverse.map(&.to_s).join(" → ")}")
+      end
 
       applied_files = migrations.select do |filename|
         applied_versions.includes?(MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i)
@@ -123,9 +136,11 @@ module Migrate
 
       @db.transaction do |tx|
         queries.each do |query|
+          @logger.try &.debug(query)
           tx.connection.exec(query)
         end
 
+        @logger.try &.debug(update_version_query(target_version))
         tx.connection.exec(update_version_query(target_version))
       end
 

@@ -101,29 +101,36 @@ migrator.next_version     # => 1
 migrator.previous_version # => nil
 
 migrator.up
+# =>  INFO -- : Migrating up to version 0 → 1
 # =>  INFO -- : Successfully migrated from version 0 to 1 in 37.602ms
 migrator.current_version  # => 1
 migrator.previous_version # => 0
 
 migrator.down
+# =>  INFO -- : Migrating down to version 1 → 0
 # =>  INFO -- : Successfully migrated from version 1 to 0 in 27.027ms
 migrator.current_version # => 0
 
 migrator.to(10)
+# =>  INFO -- : Migrating up to version 0 → 1 → 2 → 10
 # =>  INFO -- : Successfully migrated from version 0 to 10 in 62.214ms
 migrator.current_version # => 10
 migrator.next_version    # => nil
 
 migrator.redo
+# =>  INFO -- : Migrating down to version 10 → 2 → 1 → 0
 # =>  INFO -- : Successfully migrated from version 10 to 0 in 30.006ms
+# =>  INFO -- : Migrating up to version 0 → 1 → 2 → 10
 # =>  INFO -- : Successfully migrated from version 0 to 10 in 72.877ms
 migrator.current_version # => 10
 
 migrator.reset
+# =>  INFO -- : Migrating down to version 10 → 2 → 1 → 0
 # =>  INFO -- : Successfully migrated from version 10 to 0 in 28.958ms
 migrator.current_version # => 0
 
 migrator.to_latest
+# =>  INFO -- : Migrating up to version 0 → 1 → 2 → 10
 # =>  INFO -- : Successfully migrated from version 0 to 10 in 39.189ms
 migrator.current_version # => 10
 ```
@@ -147,11 +154,7 @@ Usage:
 
 ```
 $ cake db:migrate
-DEBUG -- : CREATE TABLE IF NOT EXISTS version (version INT NOT NULL)
-DEBUG -- : SELECT COUNT(version) FROM version
-DEBUG -- : SELECT version FROM version
-DEBUG -- : Applied versions: 1, 2, 10
-DEBUG -- : SELECT version FROM version
+ INFO -- : Migrating up to version 0 → 1 → 2 → 10
  INFO -- : Successfully migrated from version 0 to 10 in 33.46ms
 ```
 
