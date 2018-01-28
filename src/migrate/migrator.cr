@@ -151,8 +151,8 @@ module Migrate
     # Return a sorted array of versions extracted from filenames in migrations dir. Contains 0 version which means no migrations.
     protected def all_versions
       migrations.map do |filename|
-        MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i
-      end.unshift(0)
+        MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i64
+      end.unshift(0i64)
     end
 
     # Return sorted array of migration file names.
@@ -164,8 +164,8 @@ module Migrate
       end
     end
 
-    private CREATE_TABLE_SQL = <<-SQL
-    CREATE TABLE IF NOT EXISTS %{table} (%{column} INT NOT NULL)
+    private CREATE_VERSION_TABLE_SQL = <<-SQL
+    CREATE TABLE IF NOT EXISTS %{table} (%{column} BIGINT NOT NULL)
     SQL
 
     private COUNT_ROWS_SQL = <<-SQL
@@ -177,7 +177,7 @@ module Migrate
     SQL
 
     protected def ensure_version_table_exist
-      table_query = CREATE_TABLE_SQL % {
+      table_query = CREATE_VERSION_TABLE_SQL % {
         table:  @table,
         column: @column,
       }
