@@ -16,7 +16,7 @@ In comparsion to [micrate.cr](https://github.com/juanedi/micrate):
 - Actual migration version is stored in a database table `"version"` (can be changed) with a single value `"version"` (can be changed as well).
 - CLI removed.
 
-This shard **is not compatible** with [micrate.cr](https://github.com/juanedi/micrate), because it uses diferrent notations in SQL files (`-- !migrate Up` instead of `-- !micrate Up`) and db scheme (see above). In fact, if you really want, you can transfer your existing app to Migrate, but this will require some manual changes.
+This shard **is not compatible** with [micrate.cr](https://github.com/juanedi/micrate), because it uses diferrent notations in SQL files (`-- +migrate Up` instead of `-- !micrate Up`) and db scheme (see above). In fact, if you really want, you can transfer your existing app to Migrate, but this will require some manual changes.
 
 ## Installation
 
@@ -35,7 +35,7 @@ dependencies:
 `db/migrations/1.sql`:
 
 ```sql
--- !migrate up
+-- +migrate up
 CREATE TABLE foo (
   id      SERIAL PRIMARY KEY,
   content TEXT NOT NULL
@@ -44,14 +44,14 @@ CREATE TABLE foo (
 -- Indexes (it's just a comment, no utility function)
 CREATE UNIQUE INDEX foo_content_index ON foo (content);
 
--- !migrate down
+-- +migrate down
 DROP TABLE foo;
 ```
 
 `db/migrations/2_create_bar.sql`:
 
 ```sql
--- !migrate up
+-- +migrate up
 CREATE TABLE bar (
   id      SERIAL PRIMARY KEY,
   content TEXT NOT NULL
@@ -60,14 +60,14 @@ CREATE TABLE bar (
 -- Indexes
 CREATE UNIQUE INDEX bar_content_index ON bar (content);
 
--- !migrate down
+-- +migrate down
 DROP TABLE bar;
 ```
 
 `db/migrations/10_create_baz.sql`:
 
 ```sql
--- !migrate up
+-- +migrate up
 CREATE TABLE baz (
   id      SERIAL PRIMARY KEY,
   content TEXT NOT NULL
@@ -76,7 +76,7 @@ CREATE TABLE baz (
 -- Indexes
 CREATE UNIQUE INDEX baz_content_index ON baz (content);
 
--- !migrate down
+-- +migrate down
 DROP TABLE baz;
 ```
 

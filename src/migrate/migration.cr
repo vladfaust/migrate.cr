@@ -1,7 +1,7 @@
 module Migrate
   # :nodoc:
   struct Migration
-    CMD_PREFIX = "-- !migrate"
+    CMD_PREFIX = "-- +migrate"
 
     getter queries_up = Array(String).new, queries_down = Array(String).new
 

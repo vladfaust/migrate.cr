@@ -1,4 +1,4 @@
--- !migrate up
+-- +migrate up
 CREATE TABLE foo (
   id      SERIAL PRIMARY KEY,
   content TEXT NOT NULL
@@ -7,5 +7,5 @@ CREATE TABLE foo (
 -- Indexes
 CREATE UNIQUE INDEX foo_content_index ON foo (content);
 
--- !migrate down
+-- +migrate down
 DROP TABLE foo;

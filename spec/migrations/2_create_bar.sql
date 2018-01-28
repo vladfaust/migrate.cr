@@ -1,4 +1,4 @@
--- !migrate up
+-- +migrate up
 CREATE TABLE bar (
   id      SERIAL PRIMARY KEY,
   content TEXT NOT NULL
@@ -7,5 +7,5 @@ CREATE TABLE bar (
 -- Indexes
 CREATE UNIQUE INDEX bar_content_index ON bar (content);
 
--- !migrate down
+-- +migrate down
 DROP TABLE bar;
