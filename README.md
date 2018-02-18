@@ -26,6 +26,7 @@ Add this to your application's `shard.yml`:
 dependencies:
   migrate:
     github: vladfaust/migrate.cr
+    branch: master
 ```
 
 ## Usage
