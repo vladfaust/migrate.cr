@@ -4,7 +4,7 @@ version: 0.2.0
 authors:
   - Vlad Faust <mail@vladfaust.com>
 
-crystal: 0.24.1
+crystal: 0.25.0
 
 license: MIT
 
@@ -19,4 +19,4 @@ dependencies:
 development_dependencies:
   pg:
     github: will/crystal-pg
-    version: ~> 0.14.1
+    version: ~> 0.15.0
