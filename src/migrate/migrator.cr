@@ -9,11 +9,12 @@ module Migrate
     MIGRATION_FILE_REGEX = /(?<version>\d+)(_(?<name>\w+))?\.sql/
 
     def initialize(
-                   @db : DB::Database,
-                   @logger : Logger? = nil,
-                   @dir : String = File.join("db", "migrations"),
-                   @table : String = "version",
-                   @column : String = "version")
+      @db : DB::Database,
+      @logger : Logger? = nil,
+      @dir : String = File.join("db", "migrations"),
+      @table : String = "version",
+      @column : String = "version"
+    )
       ensure_version_table_exist
     end
 
@@ -118,7 +119,7 @@ module Migrate
       end
 
       applied_files = migrations.select do |filename|
-        applied_versions.includes?(MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i)
+        applied_versions.includes?(MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i64)
       end
 
       queries = applied_files.map do |file_path|
@@ -175,7 +176,7 @@ module Migrate
       Dir.entries(@dir).select do |filename|
         MIGRATION_FILE_REGEX.match(filename)
       end.sort_by do |filename|
-        MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i
+        MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i64
       end
     end
 
