@@ -122,6 +122,8 @@ module Migrate
         applied_versions.includes?(MIGRATION_FILE_REGEX.match(filename).not_nil!["version"].to_i64)
       end
 
+      applied_files.reverse! if direction == Direction::Down
+
       queries = applied_files.map do |file_path|
         migration = Migration.new(File.join(@dir, file_path))
 
@@ -132,8 +134,6 @@ module Migrate
           migration.queries_down
         end.not_nil!
       end.flatten
-
-      queries.reverse! if direction == Direction::Down
 
       @db.transaction do |tx|
         queries.each do |query|
