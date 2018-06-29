@@ -27,6 +27,14 @@ describe Migrate::Migrator do
     end
   end
 
+  describe "#latest?" do
+    context "on fresh DB" do
+      it "returns false" do
+        migrator.latest?.should eq false
+      end
+    end
+  end
+
   describe "#next_version" do
     context "on fresh DB" do
       it "returns 1" do
@@ -61,6 +69,14 @@ describe Migrate::Migrator do
     context "after migrations 1 & 2" do
       it "returns 1" do
         migrator.previous_version.should eq 1
+      end
+    end
+  end
+
+  describe "#latest?" do
+    context "after migrations 1 & 2" do
+      it "returns false" do
+        migrator.latest?.should eq false
       end
     end
   end
@@ -117,6 +133,14 @@ describe Migrate::Migrator do
     context "on the last migration" do
       it "returns nil" do
         migrator.next_version.should eq nil
+      end
+    end
+  end
+
+  describe "#latest?" do
+    context "on the last migration" do
+      it "returns true" do
+        migrator.latest?.should eq true
       end
     end
   end

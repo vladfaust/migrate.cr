@@ -50,6 +50,11 @@ module Migrate
       end
     end
 
+    # Return if current version is the latest one.
+    def latest?
+      next_version.nil?
+    end
+
     # Apply all the migrations from current version to the last one.
     def to_latest
       to(all_versions.last)
