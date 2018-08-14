@@ -39,7 +39,9 @@ module Migrate
     end
 
     def initialize(file_path : String)
-      initialize(File.each_line(file_path))
+      File.open(file_path) do |file|
+        initialize(file.each_line)
+      end
     end
 
     def initialize(file : File)
