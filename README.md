@@ -7,7 +7,7 @@
 [![Awesome](https://github.com/vladfaust/awesome/blob/badge-flat-alternative/media/badge-flat-alternative.svg)](https://github.com/veelenga/awesome-crystal)
 [![vladfaust.com](https://img.shields.io/badge/style-.com-lightgrey.svg?longCache=true&style=flat-square&label=vladfaust&colorB=0a83d8)](https://vladfaust.com)
 
-Simple database migration solution for [Crystal](https://crystal-lang.org/).
+A database migration solution for [Crystal](https://crystal-lang.org/).
 
 ## Installation
 
@@ -17,7 +17,10 @@ Add this to your application's `shard.yml`:
 dependencies:
   migrate:
     github: vladfaust/migrate.cr
+    version: ~> 0.3.0
 ```
+
+This shard follows [Semantic Versioning v2.0.0](http://semver.org/), so check [releases](https://github.com/vladfaust/core/releases) and change the `version` accordingly.
 
 ## Usage
 
