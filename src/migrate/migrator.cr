@@ -142,12 +142,14 @@ module Migrate
             raise error
           end
 
+          version = next_version
           queries = migration.queries_up
         when Direction::Down
           if error = migration.error_down
             raise error
           end
 
+          version = previous_version
           queries = migration.queries_down
         end
 
@@ -157,8 +159,8 @@ module Migrate
             tx.connection.exec(query)
           end
 
-          @logger.try &.debug(update_version_query(target_version))
-          tx.connection.exec(update_version_query(target_version))
+          @logger.try &.debug(update_version_query(version))
+          tx.connection.exec(update_version_query(version))
         end
       end
 
