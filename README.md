@@ -126,6 +126,22 @@ migrator.to_latest
 migrator.current_version # => 10
 ```
 
+### Errors
+
+A special command `+migrate error` is available. It raises `Migrate::Migration::Error` when a specific migration file is run. A error can be either top-level or direction-specific. This is useful to point out irreversible migrations:
+
+```sql
+-- +migrate up
+CREATE TABLE foo;
+
+-- +migrate down
+-- +migrate error Could not migrate down from this point
+```
+
+```sql
+-- +migrate error Could not run this migration file at all
+```
+
 ### [Cakefile](https://github.com/axvm/cake)
 
 Note that `Cakefile` doesn't support task arguments (that means that `Migrator#to` will not be available). Also see [cake-bake](https://github.com/vladfaust/cake-bake.cr) for baking Cakefiles (this could be helpful in Docker deployments).

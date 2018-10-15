@@ -129,20 +129,30 @@ module Migrate
 
       applied_files.reverse! if direction == Direction::Down
 
-      migrations = applied_files.map do |file_path|
-        migration = Migration.new(File.join(@dir, file_path))
+      migrations = applied_files.map { |path| Migration.new(File.join(@dir, path)) }
+
+      migrations.each do |migration|
+        if error = migration.error
+          raise error
+        end
 
         case direction
         when Direction::Up
-          migration.queries_up
-        when Direction::Down
-          migration.queries_down
-        end.not_nil!
-      end
+          if error = migration.error_up
+            raise error
+          end
 
-      migrations.each do |migration|
+          queries = migration.queries_up
+        when Direction::Down
+          if error = migration.error_down
+            raise error
+          end
+
+          queries = migration.queries_down
+        end
+
         @db.transaction do |tx|
-          migration.each do |query|
+          queries.not_nil!.each do |query|
             @logger.try &.debug(query)
             tx.connection.exec(query)
           end
