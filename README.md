@@ -17,6 +17,7 @@ Add this to your application's `shard.yml`:
 dependencies:
   migrate:
     github: vladfaust/migrate.cr
+    version: ~> 0.4.0
 ```
 
 ## Usage
