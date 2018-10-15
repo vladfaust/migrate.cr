@@ -6,8 +6,11 @@
 [![Releases](https://img.shields.io/github/release/vladfaust/migrate.cr.svg?style=flat-square)](https://github.com/vladfaust/migrate.cr/releases)
 [![Awesome](https://github.com/vladfaust/awesome/blob/badge-flat-alternative/media/badge-flat-alternative.svg)](https://github.com/veelenga/awesome-crystal)
 [![vladfaust.com](https://img.shields.io/badge/style-.com-lightgrey.svg?longCache=true&style=flat-square&label=vladfaust&colorB=0a83d8)](https://vladfaust.com)
+[![Patrons count](https://img.shields.io/badge/dynamic/json.svg?label=patrons&url=https://www.patreon.com/api/user/11296360&query=$.included[0].attributes.patron_count&style=flat-square&colorB=red&maxAge=86400)](https://www.patreon.com/vladfaust)
 
-Simple database migration solution for [Crystal](https://crystal-lang.org/).
+A database migration solution for [Crystal](https://crystal-lang.org/).
+
+[![Become Patron](https://vladfaust.com/img/patreon-small.svg)](https://www.patreon.com/vladfaust)
 
 ## Installation
 
@@ -19,6 +22,8 @@ dependencies:
     github: vladfaust/migrate.cr
     version: ~> 0.4.0
 ```
+
+This shard follows [Semantic Versioning v2.0.0](http://semver.org/), so check [releases](https://github.com/vladfaust/core/releases) and change the `version` accordingly.
 
 ## Usage
 
