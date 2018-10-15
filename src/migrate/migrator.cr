@@ -129,7 +129,7 @@ module Migrate
 
       applied_files.reverse! if direction == Direction::Down
 
-      queries = applied_files.map do |file_path|
+      migrations = applied_files.map do |file_path|
         migration = Migration.new(File.join(@dir, file_path))
 
         case direction
@@ -138,16 +138,18 @@ module Migrate
         when Direction::Down
           migration.queries_down
         end.not_nil!
-      end.flatten
+      end
 
-      @db.transaction do |tx|
-        queries.each do |query|
-          @logger.try &.debug(query)
-          tx.connection.exec(query)
+      migrations.each do |migration|
+        @db.transaction do |tx|
+          migration.each do |query|
+            @logger.try &.debug(query)
+            tx.connection.exec(query)
+          end
+
+          @logger.try &.debug(update_version_query(target_version))
+          tx.connection.exec(update_version_query(target_version))
         end
-
-        @logger.try &.debug(update_version_query(target_version))
-        tx.connection.exec(update_version_query(target_version))
       end
 
       previous = current
