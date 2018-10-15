@@ -154,9 +154,13 @@ module Migrate
         end
 
         @db.transaction do |tx|
-          queries.not_nil!.each do |query|
-            @logger.try &.debug(query)
-            tx.connection.exec(query)
+          if queries.not_nil!.empty?
+            @logger.try &.warn("No queries to run in migration file with version #{version}, applying anyway")
+          else
+            queries.not_nil!.each do |query|
+              @logger.try &.debug(query)
+              tx.connection.exec(query)
+            end
           end
 
           @logger.try &.debug(update_version_query(version))

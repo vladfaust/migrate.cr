@@ -15,7 +15,7 @@ describe "Migrate::Migrator with errors" do
 
   migrator = Migrate::Migrator.new(
     db,
-    nil,
+    Logger.new(STDOUT).tap(&.level = Logger::DEBUG),
     File.join("spec", "migrations_with_errors")
   )
 
