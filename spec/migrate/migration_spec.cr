@@ -11,6 +11,18 @@ describe Migrate::Migration do
   -- Indexes
   CREATE UNIQUE INDEX foo_content_index ON foo (content);
 
+  -- Statements that might contain semicolons
+  -- +migrate start
+  CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+  RETURNS TRIGGER AS
+  $$
+  BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql;
+  -- +migrate end
+
   -- +migrate down
   DROP TABLE foo;
 
@@ -30,8 +42,19 @@ describe Migrate::Migration do
     CREATE UNIQUE INDEX foo_content_index ON foo (content);
     SQL
 
+    q3 = <<-SQL
+    CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+    RETURNS TRIGGER AS
+    $$
+    BEGIN
+      NEW.updated_at = NOW();
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+    SQL
+
     it do
-      migration.queries_up.should eq [q1, q2]
+      migration.queries_up.should eq [q1, q2, q3]
     end
   end
 
