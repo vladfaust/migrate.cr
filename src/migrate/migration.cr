@@ -10,7 +10,8 @@ module Migrate
 
     def initialize(lines : Iterator)
       direction : Direction? = nil
-      finished : Bool = true
+      complex = false
+      complex_end = false
 
       buffer = String.new
 
@@ -24,9 +25,9 @@ module Migrate
           when "down"
             direction = Direction::Down
           when "start"
-            finished = false
+            complex = true
           when "end"
-            finished = true
+            complex_end = true
           when "error"
             message = /^#{Regex.escape(CMD_PREFIX)} error (?<message>.+)$/.match(line).try &.["message"]
 
@@ -42,7 +43,10 @@ module Migrate
           buffer += (line + "\n") if direction
         end
 
-        if finished && line.strip.ends_with?(";")
+        if (line.strip.ends_with?(";") && !complex) || complex_end
+          complex_end = false
+          complex = false
+
           case direction
           when Direction::Up
             @queries_up.push(buffer.dup.strip)

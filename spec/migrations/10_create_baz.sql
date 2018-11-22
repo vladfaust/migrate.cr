@@ -17,7 +17,7 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
--- +migrate end;
+-- +migrate end
 
 -- +migrate down
 DROP TABLE baz;
