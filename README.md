@@ -100,7 +100,7 @@ DROP TABLE baz;
 
 ### Migration in the code
 
-All migrations are applied in a single **transaction**. That means that if a migration is invalid, all statements in this transaction will be rolled back.
+All migrations run in separate **transactions**. That means that if a migration is invalid, all its statements will be rolled back (but not the previously applied migrations in a batch).
 
 ```crystal
 require "pg"
