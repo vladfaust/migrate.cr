@@ -15,7 +15,7 @@ A database migration tool for [Crystal](https://crystal-lang.org/).
 
 Thanks to all my patrons, I can continue working on beautiful Open Source Software! 🙏
 
-[Alexander Maslov](https://seendex.ru), [Lauri Jutila](https://github.com/ljuti)
+[Lauri Jutila](https://github.com/ljuti), [Alexander Maslov](https://seendex.ru), Dainel Vera
 
 *You can become a patron too in exchange of prioritized support and other perks*
 
