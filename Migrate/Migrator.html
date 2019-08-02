@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.29.0">
+<meta name="generator" content="Crystal Docs 0.30.0">
 
 
 <link href="../css/style.css" rel="stylesheet" type="text/css">
@@ -113,7 +113,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28db%3ADB%3A%3ADatabase%2Clogger%3ALogger%3F%3Dnil%2Cdir%3AString%3DFile.join%28%26quot%3Bdb%26quot%3B%2C%26quot%3Bmigrations%26quot%3B%29%2Ctable%3AString%3D%26quot%3Bversion%26quot%3B%2Ccolumn%3AString%3D%26quot%3Bversion%26quot%3B%29-class-method" class="signature"><strong>.new</strong>(db : DB::Database, logger : Logger? = <span class="n">nil</span>, dir : String = <span class="t">File</span>.join(<span class="s">&quot;db&quot;</span>, <span class="s">&quot;migrations&quot;</span>), table : String = <span class="s">&quot;version&quot;</span>, column : String = <span class="s">&quot;version&quot;</span>)</a>
+        <a href="#new(db:DB::Database,logger:Logger?=nil,dir:String=File.join(&quot;db&quot;,&quot;migrations&quot;),table:String=&quot;version&quot;,column:String=&quot;version&quot;)-class-method" class="signature"><strong>.new</strong>(db : DB::Database, logger : Logger? = <span class="n">nil</span>, dir : String = <span class="t">File</span>.join(<span class="s">&quot;db&quot;</span>, <span class="s">&quot;migrations&quot;</span>), table : String = <span class="s">&quot;version&quot;</span>, column : String = <span class="s">&quot;version&quot;</span>)</a>
         
       </li>
     
@@ -141,7 +141,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#latest%3F-instance-method" class="signature"><strong>#latest?</strong></a>
+        <a href="#latest?-instance-method" class="signature"><strong>#latest?</strong></a>
         
           <div class="summary"><p>Return if current version is the latest one.</p></div>
         
@@ -176,7 +176,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#to%28target_version%3AInt32%7CInt64%29-instance-method" class="signature"><strong>#to</strong>(target_version : Int32 | Int64)</a>
+        <a href="#to(target_version:Int32%7CInt64)-instance-method" class="signature"><strong>#to</strong>(target_version : Int32 | Int64)</a>
         
           <div class="summary"><p>Migrate to specific version.</p></div>
         
@@ -234,7 +234,7 @@
         
         def self.<strong>new</strong>(db : DB::Database, logger : Logger? = <span class="n">nil</span>, dir : String = <span class="t">File</span>.join(<span class="s">&quot;db&quot;</span>, <span class="s">&quot;migrations&quot;</span>), table : String = <span class="s">&quot;version&quot;</span>, column : String = <span class="s">&quot;version&quot;</span>)
 
-        <a class="method-permalink" href="#new%28db%3ADB%3A%3ADatabase%2Clogger%3ALogger%3F%3Dnil%2Cdir%3AString%3DFile.join%28%26quot%3Bdb%26quot%3B%2C%26quot%3Bmigrations%26quot%3B%29%2Ctable%3AString%3D%26quot%3Bversion%26quot%3B%2Ccolumn%3AString%3D%26quot%3Bversion%26quot%3B%29-class-method">#</a>
+        <a class="method-permalink" href="#new(db:DB::Database,logger:Logger?=nil,dir:String=File.join(&quot;db&quot;,&quot;migrations&quot;),table:String=&quot;version&quot;,column:String=&quot;version&quot;)-class-method">#</a>
       </div>
       
       <br/>
@@ -293,7 +293,7 @@
         
         def <strong>latest?</strong>
 
-        <a class="method-permalink" href="#latest%3F-instance-method">#</a>
+        <a class="method-permalink" href="#latest?-instance-method">#</a>
       </div>
       
         <div class="doc"><p>Return if current version is the latest one.</p></div>
@@ -383,7 +383,7 @@
         
         def <strong>to</strong>(target_version : Int32 | Int64)
 
-        <a class="method-permalink" href="#to%28target_version%3AInt32%7CInt64%29-instance-method">#</a>
+        <a class="method-permalink" href="#to(target_version:Int32%7CInt64)-instance-method">#</a>
       </div>
       
         <div class="doc"><p>Migrate to specific version.</p></div>
