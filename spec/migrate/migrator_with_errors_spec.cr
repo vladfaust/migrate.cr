@@ -11,6 +11,10 @@ db = DB.open(ENV["DATABASE_URL"])
 {% end %}
 
 describe "Migrate::Migrator with errors" do
+  puts "Trying 1.."
+  MUTEX.lock
+  puts "Locked 1"
+
   drop_db
 
   migrator = Migrate::Migrator.new(
@@ -40,4 +44,8 @@ describe "Migrate::Migrator with errors" do
       migrator.current_version.should eq 1
     end
   end
+
+  puts "Unlocking 1.."
+  MUTEX.unlock
+  puts "Unlocked 1"
 end

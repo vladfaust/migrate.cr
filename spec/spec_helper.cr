@@ -3,6 +3,8 @@ require "pg"
 
 require "../src/migrate"
 
+MUTEX = Mutex.new
+
 def drop_db
   DB.open(ENV["DATABASE_URL"]) do |db|
     db.exec <<-SQL
