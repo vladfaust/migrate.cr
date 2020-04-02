@@ -86,7 +86,7 @@ module Migrate
 
     # Migrate to specific version.
     def to(target_version : Int32 | Int64)
-      started_at = Time.now
+      started_at = Time.utc
       current = current_version
 
       if target_version == current
@@ -171,7 +171,7 @@ module Migrate
       previous = current
       current = current_version
 
-      @logger.try &.info("Successfully migrated from version #{previous} to #{current} in #{TimeFormat.auto(Time.now - started_at)}")
+      @logger.try &.info("Successfully migrated from version #{previous} to #{current} in #{TimeFormat.auto(Time.utc - started_at)}")
       return current
     end
 
