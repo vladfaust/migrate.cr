@@ -1,4 +1,4 @@
-require "logger"
+require "log"
 require "time_format"
 require "db"
 
@@ -10,7 +10,6 @@ module Migrate
 
     def initialize(
       @db : DB::Database,
-      @logger : Logger? = nil,
       @dir : String = File.join("db", "migrations"),
       @table : String = "version",
       @column : String = "version"
@@ -86,11 +85,11 @@ module Migrate
 
     # Migrate to specific version.
     def to(target_version : Int32 | Int64)
-      started_at = Time.now
+      started_at = Time.utc
       current = current_version
 
       if target_version == current
-        @logger.try &.info("Already at version #{current}; aborting")
+        Log.info { "Already at version #{current}; aborting" }
         return nil
       end
 
@@ -109,7 +108,7 @@ module Migrate
 
       case direction
       when Direction::Up
-        @logger.try &.info("Migrating up to version #{applied_versions.dup.unshift(current.to_i64).map(&.to_s).join(" → ")}")
+        Log.info { "Migrating up to version #{applied_versions.dup.unshift(current.to_i64).map(&.to_s).join(" → ")}" }
       when Direction::Down
         # Add previous version to the list of applied versions,
         # turning "10 → 2" into "10 → 2 → 1"
@@ -120,7 +119,7 @@ module Migrate
           end
         end
 
-        @logger.try &.info("Migrating down to version #{versions.reverse.map(&.to_s).join(" → ")}")
+        Log.info { "Migrating down to version #{versions.reverse.map(&.to_s).join(" → ")}" }
       end
 
       applied_files = migrations.select do |filename|
@@ -155,15 +154,15 @@ module Migrate
 
         @db.transaction do |tx|
           if queries.not_nil!.empty?
-            @logger.try &.warn("No queries to run in migration file with version #{version}, applying anyway")
+            Log.warn { "No queries to run in migration file with version #{version}, applying anyway" }
           else
             queries.not_nil!.each do |query|
-              @logger.try &.debug(query)
+              Log.debug { query }
               tx.connection.exec(query)
             end
           end
 
-          @logger.try &.debug(update_version_query(version))
+          Log.debug { update_version_query(version) }
           tx.connection.exec(update_version_query(version))
         end
       end
@@ -171,7 +170,7 @@ module Migrate
       previous = current
       current = current_version
 
-      @logger.try &.info("Successfully migrated from version #{previous} to #{current} in #{TimeFormat.auto(Time.now - started_at)}")
+      Log.info { "Successfully migrated from version #{previous} to #{current} in #{TimeFormat.auto(Time.utc - started_at)}" }
       return current
     end
 
@@ -232,14 +231,14 @@ module Migrate
         value:  0,
       }
 
-      @logger.try &.debug(table_query)
+      Log.debug { table_query }
       @db.exec(table_query)
 
-      @logger.try &.debug(count_query)
+      Log.debug { count_query }
       count = @db.scalar(count_query).as(Int64)
 
       if count == 0
-        @logger.try &.debug(insert_query)
+        Log.debug { insert_query }
         @db.exec(insert_query)
       end
     end
