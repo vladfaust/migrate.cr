@@ -11,16 +11,14 @@ db = DB.open(ENV["DATABASE_URL"])
 {% end %}
 
 describe "Migrate::Migrator with errors" do
-  drop_db
-
-  migrator = Migrate::Migrator.new(
-    db,
-    Logger.new(STDOUT).tap(&.level = Logger::DEBUG),
-    File.join("spec", "migrations_with_errors")
-  )
-
   describe "direction-specific errors" do
     it do
+      drop_db
+
+      migrator = Migrate::Migrator.new(
+        db,
+        File.join("spec", "migrations_with_errors")
+      )
       migrator.up
 
       expect_raises Migrate::Migration::Error do
@@ -33,6 +31,15 @@ describe "Migrate::Migrator with errors" do
 
   describe "top-level errors" do
     it do
+      drop_db
+
+      migrator = Migrate::Migrator.new(
+        db,
+        File.join("spec", "migrations_with_errors")
+      )
+
+      migrator.up
+
       expect_raises Migrate::Migration::Error do
         migrator.up
       end
